@@ -1,9 +1,19 @@
+let currentDate = new Date();
+let yyyy = currentDate.getFullYear();
+let mm = String(currentDate.getMonth() + 1).padStart(2, '0');
+let dd = String(currentDate.getDate()).padStart(2, '0');
+let formattedCurrentDate = `${yyyy}-${mm}-${dd}`;
+let index = 0;
+const prevButton = document.getElementById('prevButton');
+const nextButton = document.getElementById('nextButton');
+
 document.addEventListener("DOMContentLoaded", function () {
+    fetchAPOD(formattedCurrentDate);
+});
+
+const fetchAPOD = (date) => {
     const apiKey = 'bfvtqtEz8qnHxObZDIzLNxHPPqPtaPB33yRcajPM';
-    let currentDate = new Date();
-    
-   const fetchAPOD = (date) => {
-    const API_URL = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}`;
+    const API_URL = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&date=${date}`;
 
     fetch(API_URL)
         .then(response => response.json())
@@ -29,22 +39,31 @@ document.addEventListener("DOMContentLoaded", function () {
         mainPictureContainer.appendChild(titleElement);
         mainPictureContainer.appendChild(explanationElement);
 
-        updateNavigation();
+        index++;
+        // updateNavigation();
     };
 
-    // const updateNavigation = () => {
-    //     const prevButton = document.getElementById('prevButton');
-    //     const nextButton = document.getElementById('nextButton');
+// const updateNavigation = () => {
 
-    //     let yesterday = new Date();
-    //     yesterday.setDate(yesterday.getDate() - 1);
+        let yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - index);
+        
+        let yyyy2 = yesterday.getFullYear();
+        let mm2 = String(yesterday.getMonth() + 1).padStart(2, '0');
+        let dd2 = String(yesterday.getDate()).padStart(2, '0');
+        
+        let formattedYesterday = `${yyyy2}-${mm2}-${dd2}`;
+        console.log(formattedYesterday)
 
-    //     prevButton.addEventListener('click', () => fetchAPOD(yesterday));
-    //     nextButton.addEventListener('click', () => fetchAPOD(currentDate));
+        // let tomorrow = yesterday.setDate(yesterday.getDate() - (index - 1));
+        
+        // let yyyy2 = tomorrow.getFullYear();
+        // let mm2 = String(tomorrow.getMonth() + 1).padStart(2, '0');
+        // let dd2 = String(tomorrow.getDate()).padStart(2, '0');
+        
+        // let formattedTomorrow = `${yyyy2}-${mm2}-${dd2}`;
 
-    //     console.log(yesterday);
-    //     console.log(currentDate);
+        prevButton.addEventListener('click', () => fetchAPOD(formattedYesterday));
+        // nextButton.addEventListener('click', () => fetchAPOD(formattedTomorrow));
+
     // };
-
-    fetchAPOD(currentDate);
-});
